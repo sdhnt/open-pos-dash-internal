@@ -42,6 +42,9 @@ const PrivateRoute = ({ children, ...rest }) => {
 };
 
 const App = () => {
+  if (process.env.NODE_ENV === 'development') {
+    return <Dashboard />;
+  }
   return (
     <Router>
       <div>
