@@ -11,6 +11,7 @@ import {
   TablePagination
 } from '@material-ui/core';
 import { FirebaseDB as db } from '../../constants/firebase';
+import BusinessModal from '../complement/BusinessModal';
 
 const useStyles = makeStyles(theme => ({
   main: {
@@ -41,6 +42,8 @@ const Dashboard = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [open, setOpen] = useState(false);
+  const [focusedUser, setFocusedUser] = useState({});
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -49,6 +52,17 @@ const Dashboard = () => {
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleOpen = userId => {
+    setOpen(true);
+    const user = users.find(user => userId === user.id);
+    setFocusedUser(user);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setFocusedUser({});
   };
 
   useEffect(() => {
@@ -100,7 +114,15 @@ const Dashboard = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(row => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.id}
+                    onClick={() => {
+                      handleOpen(row.id);
+                    }}
+                  >
                     {columns.map(column => {
                       const value = row[column.id];
                       return (
@@ -126,6 +148,7 @@ const Dashboard = () => {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </div>
+      <BusinessModal open={open} user={focusedUser} handleClose={handleClose} />
     </Paper>
   );
 };
