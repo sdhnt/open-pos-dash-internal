@@ -14,7 +14,11 @@ import { FirebaseDB as db } from '../../constants/firebase';
 
 const useStyles = makeStyles(theme => ({
   main: {
+    margin: '2vh 2vw',
     padding: '2vh 2vw'
+  },
+  header: {
+    margin: '1vh auto'
   },
   tableWrapper: {
     maxHeight: '80vh',
@@ -23,13 +27,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const columns = [
-  { id: 'business_address', label: 'Business Address', minWidth: 170 },
-  { id: 'business_name', label: 'Name', minWidth: 100 }
+  { id: 'business_address', label: 'Business Address', minWidth: 150 },
+  { id: 'business_name', label: 'Name', minWidth: 100 },
+  { id: 'businesstype', label: 'Type', minWidth: 80 },
+  { id: 'cash_balance', label: 'Cash Balance', minWidth: 50 },
+  { id: 'owner_name', label: 'Owner', minWidth: 50 },
+  { id: 'ph_no', label: 'Phone', minWidth: 50 }
 ];
 
 const Dashboard = () => {
   const classes = useStyles();
   const [rows, setRows] = useState([]);
+  const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -43,24 +52,33 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    db.collection('users')
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const row = {
-            business_address: data.business_address,
-            business_name: data.business_name
-          };
-          rows.push(row);
-          setRows(rows);
+    const fetchData = async () => {
+      const newRows = [],
+        newUsers = [];
+      await db
+        .collection('users')
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            const row = { id: doc.id };
+            columns.forEach(column => {
+              row[column.id] = doc.data()[column.id];
+            });
+            newRows.push(row);
+            newUsers.push({ ...doc.data(), id: doc.id });
+          });
         });
-      });
-  }, [rows]);
+      setRows(newRows);
+      setUsers(newUsers);
+    };
+    fetchData();
+  }, [rows.length, users.length]);
 
   return (
     <Paper className={classes.main}>
-      <Typography variant={'h1'}>Dashboard</Typography>
+      <div className={classes.header}>
+        <Typography variant={'h3'}>Dashboard</Typography>
+      </div>
 
       <div className={classes.tableWrapper}>
         <Table stickyHeader>
@@ -82,7 +100,7 @@ const Dashboard = () => {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(row => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map(column => {
                       const value = row[column.id];
                       return (
