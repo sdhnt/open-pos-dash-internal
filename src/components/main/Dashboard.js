@@ -28,8 +28,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const columns = [
-  { id: 'business_address', label: 'Business Address', minWidth: 150 },
   { id: 'business_name', label: 'Name', minWidth: 100 },
+  { id: 'business_address', label: 'Business Address', minWidth: 150 },
   { id: 'businesstype', label: 'Type', minWidth: 80 },
   { id: 'cash_balance', label: 'Cash Balance', minWidth: 50 },
   { id: 'owner_name', label: 'Owner', minWidth: 50 },
