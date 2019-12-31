@@ -52,7 +52,7 @@ const App = () => {
           <Route path="/login">
             <Login auth={auth} />
           </Route>
-          <PrivateRoute path="/dashboard">
+          <PrivateRoute exact path="/">
             <Dashboard />
           </PrivateRoute>
         </Switch>
