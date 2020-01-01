@@ -2,16 +2,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
 import FirebaseModule from 'firebase/app';
-
-const config = {
-  apiKey: 'AIzaSyBlxUkCX8OPsb9QL2p_jN8vaHdb5LhsS7A',
-  authDomain: 'open-fintech.firebaseapp.com',
-  databaseURL: 'https://open-fintech.firebaseio.com',
-  projectId: 'open-fintech',
-  storageBucket: 'open-fintech.appspot.com',
-  messagingSenderId: '1001643033524',
-  measurementId: 'G-CECMRG504L'
-};
+import config from '../config';
 
 let firebaseInitialized;
 FirebaseModule.initializeApp(config);
