@@ -112,7 +112,10 @@ export const getProfitMargins = (products, { priceType }) => {
     }
   });
   return {
-    margin: Math.round((profitMargins / countedProducts) * 1000) / 1000,
+    margin:
+      countedProducts !== 0
+        ? Math.round((profitMargins / countedProducts) * 1000) / 1000
+        : 0,
     countedProducts
   };
 };
