@@ -1,5 +1,6 @@
 import React from 'react';
-import { makeStyles, Modal, Typography } from '@material-ui/core';
+import { makeStyles, Modal, Typography, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -13,6 +14,15 @@ const useStyles = makeStyles(theme => ({
     borderColor: theme.palette.primary.main,
     borderRadius: '20px',
     padding: '2vh 2vw'
+  },
+  topBar: {
+    margin: `${theme.spacing(2)} auto`
+  },
+  left: {
+    float: 'left'
+  },
+  right: {
+    float: 'right'
   },
   text: {
     margin: '4px auto'
@@ -60,9 +70,24 @@ const BusinessModal = props => {
       }}
     >
       <div className={classes.paper}>
-        <Typography variant={'h4'} aria-label="title">
-          {user.business_name}
-        </Typography>
+        <div className={classes.topBar}>
+          <div className={classes.left}>
+            <Typography variant={'h4'} aria-label="title">
+              {user.business_name}
+            </Typography>
+          </div>
+          <div className={classes.right}>
+            <Button
+              color="primary"
+              component={Link}
+              to={`/details`}
+              onClick={() => sessionStorage.setItem('businessId', user.id)}
+            >
+              More details
+            </Button>
+          </div>
+        </div>
+        <div style={{ clear: 'both' }} />
         {displayedFields.map(field => (
           <Typography variant={'body1'} className={classes.text} key={field.id}>
             {field.key} : {field.value}

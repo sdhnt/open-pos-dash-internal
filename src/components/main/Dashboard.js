@@ -70,7 +70,7 @@ const Dashboard = () => {
       const newRows = [],
         newUsers = [];
       await db
-        .collection('users')
+        .collection('users-archive')
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
