@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
+import Chart from './Chart';
 
-const useStyles = makeStyles(theme => ({}));
+const useStyles = makeStyles(theme => ({
+  sales: {
+    marginBottom: theme.spacing(1)
+  }
+}));
 
 const PREChart = props => {
   const classes = useStyles();
@@ -12,7 +17,15 @@ const PREChart = props => {
 
   return (
     <div>
-      <Typography>Average sales:</Typography>
+      <div className={classes.sales}>
+        <Typography>Average sales: {chartData.averageSales}</Typography>
+      </div>
+      <Chart
+        title="Revenue, Profit and Expenses"
+        data={chartData.data}
+        dataKeyX="date"
+        dataKeysY={['Revenue', 'Profit', 'Expenses']}
+      />
     </div>
   );
 };
