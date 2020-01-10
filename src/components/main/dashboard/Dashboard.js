@@ -10,8 +10,8 @@ import {
   TableBody,
   TablePagination
 } from '@material-ui/core';
-import { FirebaseDB as db } from '../../constants/firebase';
-import BusinessModal from '../complement/BusinessModal';
+import { FirebaseDB as db } from '../../../constants/firebase';
+import BusinessModal from './BusinessModal';
 
 const useStyles = makeStyles(theme => ({
   header: {
