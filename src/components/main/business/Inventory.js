@@ -17,7 +17,6 @@ const Inventory = props => {
   const { business } = props;
 
   const data = getProfitMargins(business.products, { priceType: 'price' });
-  console.log(data);
 
   return (
     <Container>
@@ -25,12 +24,20 @@ const Inventory = props => {
         <Typography variant="h5">Inventory</Typography>
       </div>
       <Paper className={classes.paper}>
-        <Typography variant={'body1'}>
-          Average retail profit margin: {data.margin * 100}%
-        </Typography>
-        <Typography variant={'body1'}>
-          Counted number of products: {data.countedProducts}
-        </Typography>
+        {data.countedProducts !== 0 ? (
+          <>
+            <Typography variant={'body1'}>
+              Average retail profit margin: {data.margin * 100}%
+            </Typography>
+            <Typography variant={'body1'}>
+              Counted number of products: {data.countedProducts}
+            </Typography>
+          </>
+        ) : (
+          <Typography variant={'body1'}>
+            Product information incomplete
+          </Typography>
+        )}
       </Paper>
     </Container>
   );
