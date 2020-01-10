@@ -1,17 +1,30 @@
 import React from 'react';
-import { makeStyles, Modal, Typography, Button } from '@material-ui/core';
+import {
+  makeStyles,
+  Modal,
+  Typography,
+  Button,
+  TableCell,
+  TableRow,
+  TableBody,
+  Table
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   paper: {
     position: 'absolute',
     top: '10vh',
     margin: 'auto',
     width: '80vw',
+    maxWidth: 'calc(700px + 10vw)',
     maxHeight: '80vh',
     background: 'white',
-    border: '2px solid',
-    borderColor: theme.palette.primary.main,
     borderRadius: '20px',
     padding: '2vh 2vw'
   },
@@ -23,6 +36,9 @@ const useStyles = makeStyles(theme => ({
   },
   right: {
     float: 'right'
+  },
+  table: {
+    minWidth: '500px'
   },
   text: {
     margin: '4px auto'
@@ -63,11 +79,7 @@ const BusinessModal = props => {
       aria-labelledby="title"
       open={open}
       onClose={handleClose}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
+      className={classes.modal}
     >
       <div className={classes.paper}>
         <div className={classes.topBar}>
@@ -88,11 +100,16 @@ const BusinessModal = props => {
           </div>
         </div>
         <div style={{ clear: 'both' }} />
-        {displayedFields.map(field => (
-          <Typography variant={'body1'} className={classes.text} key={field.id}>
-            {field.key} : {field.value}
-          </Typography>
-        ))}
+        <Table className={classes.table} aria-label="table">
+          <TableBody>
+            {displayedFields.map(field => (
+              <TableRow key={field.id}>
+                <TableCell>{field.key}</TableCell>
+                <TableCell align="right">{field.value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </Modal>
   );
