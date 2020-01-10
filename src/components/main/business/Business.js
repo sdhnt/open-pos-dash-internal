@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, makeStyles, Typography } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
 import Sales from './Sales';
 

@@ -1,12 +1,14 @@
 import moment from 'moment';
 
-const filterTransactionsByDays = (transactions, days) => {
-  return transactions.filter(transaction =>
-    moment(transaction.datetime).isSameOrAfter(
-      moment()
-        .subtract(days, 'day')
-        .startOf('day')
-    )
+const filterTransactionsByDay = (transactions, day) => {
+  return transactions.filter(
+    transaction =>
+      moment(transaction.datetime).isSameOrAfter(moment(day).startOf('day')) &&
+      moment(transaction.datetime).isBefore(
+        moment(day)
+          .add(1, 'day')
+          .startOf('day')
+      )
   );
 };
 
@@ -49,29 +51,39 @@ export const getAverageSales = performances => {
     const amount = performance.revenue;
     if (amount > 0) totalSales += amount;
   });
-  return Math.round((totalSales / 30) * 100) / 100;
+  return Math.round((totalSales / performances.length) * 100) / 100;
 };
 
-export const getMonthlyPerformance = transactions => {
-  const monthlyPerformance = [];
+export const getAnnualPerformance = transactions => {
+  const annualPerformance = [];
   for (let i = 11; i >= 0; i--) {
     const month = moment()
       .subtract(i, 'month')
       .startOf('month');
-    const thisMonthPerformance = getPerformanceByMonth(transactions, month);
+    const filteredTransactions = filterTransactionsByMonth(transactions, month);
+    const thisMonthPerformance = getBusinessPerformance(filteredTransactions);
     thisMonthPerformance.month = month.format('MMM');
-    monthlyPerformance.push(thisMonthPerformance);
+    annualPerformance.push(thisMonthPerformance);
+  }
+  return annualPerformance;
+};
+
+export const getMonthlyPerformance = (transactions, month) => {
+  const monthlyPerformance = [];
+  const length = moment(month).daysInMonth();
+  for (let i = 0; i < length; i++) {
+    const day = moment(month)
+      .startOf('month')
+      .add(i, 'day');
+    const transactionsThisDay = filterTransactionsByDay(transactions, day);
+    if (day.isBefore(moment().startOf('day')))
+      monthlyPerformance.push(getBusinessPerformance(transactionsThisDay));
   }
   return monthlyPerformance;
 };
 
 export const getPerformanceByDays = (performances, days) => {
   return performances.slice(performances.length - days);
-};
-
-export const getPerformanceByMonth = (transactions, month) => {
-  const filteredTransactions = filterTransactionsByMonth(transactions, month);
-  return getBusinessPerformance(filteredTransactions);
 };
 
 export const getProfitMargins = (products, { priceType }) => {
