@@ -6,7 +6,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     margin: `auto`
   },
-  title: {
+  header: {
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     padding: theme.spacing(2)
@@ -35,8 +35,8 @@ const Business = () => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.title}>
-        <Typography variant="h4">{business.business_name}</Typography>
+      <div className={classes.header}>
+        <Typography variant="h3">{business.business_name}</Typography>
       </div>
     </div>
   );
