@@ -62,9 +62,10 @@ const Sales = props => {
 
   PREAData = PREAData.map(dataArray => {
     dataArray.data = dataArray.data.map(performance => ({
+      date: performance.date,
       Profit: performance.profit,
       Revenue: performance.revenue,
-      Expenses: performance.expenses
+      Expenses: -1 * performance.expenses
     }));
     return dataArray;
   });

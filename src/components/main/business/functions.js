@@ -76,14 +76,28 @@ export const getMonthlyPerformance = (transactions, month) => {
       .startOf('month')
       .add(i, 'day');
     const transactionsThisDay = filterTransactionsByDay(transactions, day);
-    if (day.isBefore(moment().startOf('day')))
-      monthlyPerformance.push(getBusinessPerformance(transactionsThisDay));
+    if (day.isBefore(moment().startOf('day'))) {
+      const businessPerformance = getBusinessPerformance(transactionsThisDay);
+      businessPerformance.date = day.format('D');
+      monthlyPerformance.push(businessPerformance);
+    }
   }
   return monthlyPerformance;
 };
 
 export const getPerformanceByDays = (performances, days) => {
-  return performances.slice(performances.length - days);
+  const filteredPerformances = performances.slice(
+    performances.length - days - 1
+  );
+  filteredPerformances.pop();
+  let date = moment()
+    .subtract(days + 1, 'day')
+    .startOf('day');
+  filteredPerformances.forEach(performance => {
+    performance.date = date.format('D');
+    date = date.add(1, 'day');
+  });
+  return filteredPerformances;
 };
 
 export const getProfitMargins = (products, { priceType }) => {
