@@ -16,7 +16,11 @@ const Sales = props => {
   const classes = useStyles();
   const { business } = props;
 
-  const data = getMonthlyPerformance(business.transactions);
+  let monthlyPerformance = getMonthlyPerformance(business.transactions);
+  monthlyPerformance = monthlyPerformance.map(performance => ({
+    month: performance.month,
+    Revenue: performance.revenue
+  }));
 
   return (
     <Container>
@@ -24,7 +28,12 @@ const Sales = props => {
         <Typography variant="h5">Sales and Income</Typography>
       </div>
       <Paper className={classes.paper}>
-        <Chart data={data} />
+        <Chart
+          title="Average sales in the last 12 months"
+          data={monthlyPerformance}
+          dataKeyX="month"
+          dataKeysY={['Revenue']}
+        />
       </Paper>
     </Container>
   );

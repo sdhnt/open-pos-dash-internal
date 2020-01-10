@@ -20,16 +20,23 @@ const useStyles = makeStyles(theme => ({
 
 const Chart = props => {
   const classes = useStyles();
-  const { data } = props;
+  const { title, data, dataKeyX, dataKeysY } = props;
 
   const theme = useTheme();
-  const color = theme.palette.primary.main;
+  const colors = [
+    theme.palette.primary.main,
+    theme.palette.secondary.main,
+    theme.palette.tertiary.main
+  ];
+
+  const yAxisKeys = [];
+  for (let i = 0; i < dataKeysY.length; i++) {
+    yAxisKeys.push({ dataKey: dataKeysY[i], color: colors[i] });
+  }
 
   return (
     <>
-      <Typography variant={'body1'}>
-        Average sales in the last 12 months
-      </Typography>
+      <Typography variant={'body1'}>{title}</Typography>
       <div className={classes.chart}>
         <ResponsiveContainer width={'90%'} height={250}>
           <AreaChart
@@ -37,22 +44,34 @@ const Chart = props => {
             margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
           >
             <defs>
-              <linearGradient id="averageSales" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={color} stopOpacity={0.8} />
-                <stop offset="95%" stopColor={color} stopOpacity={0.1} />
-              </linearGradient>
+              {yAxisKeys.map(key => (
+                <linearGradient
+                  id={key.dataKey}
+                  key={key.dataKey}
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop offset="5%" stopColor={key.color} stopOpacity={0.8} />
+                  <stop offset="95%" stopColor={key.color} stopOpacity={0.1} />
+                </linearGradient>
+              ))}
             </defs>
-            <XAxis dataKey="month" />
-            <YAxis dataKey="revenue" />
+            <XAxis dataKey={dataKeyX} />
+            <YAxis />
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
-            <Area
-              type="monotone"
-              dataKey="revenue"
-              stroke={color}
-              fillOpacity={1}
-              fill="url(#averageSales)"
-            />
+            {yAxisKeys.map(key => (
+              <Area
+                type="monotone"
+                dataKey={key.dataKey}
+                key={key.dataKey}
+                stroke={key.color}
+                fillOpacity={1}
+                fill={`url(#${key.dataKey})`}
+              />
+            ))}
           </AreaChart>
         </ResponsiveContainer>
       </div>
