@@ -59,7 +59,7 @@ export const getMonthlyPerformance = transactions => {
       .subtract(i, 'month')
       .startOf('month');
     const thisMonthPerformance = getPerformanceByMonth(transactions, month);
-    thisMonthPerformance.month = month.toDate();
+    thisMonthPerformance.month = month.format('MMM');
     monthlyPerformance.push(thisMonthPerformance);
   }
   return monthlyPerformance;

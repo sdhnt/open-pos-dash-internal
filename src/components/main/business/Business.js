@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
+import { Container, makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
+import Sales from './Sales';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -10,6 +11,9 @@ const useStyles = makeStyles(theme => ({
     background: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     padding: theme.spacing(2)
+  },
+  content: {
+    margin: theme.spacing(2)
   }
 }));
 
@@ -37,6 +41,9 @@ const Business = () => {
     <div className={classes.root}>
       <div className={classes.header}>
         <Typography variant="h3">{business.business_name}</Typography>
+      </div>
+      <div className={classes.content}>
+        <Sales business={business} />
       </div>
     </div>
   );
