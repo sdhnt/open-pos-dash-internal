@@ -12,10 +12,10 @@ let theme = createMuiTheme({
       main: '#301924'
     },
     secondary: {
-      main: '#FFA500'
+      main: '#795548'
     },
     tertiary: {
-      dark: '#3b5998'
+      main: '#607d8b'
     }
   }
 });
