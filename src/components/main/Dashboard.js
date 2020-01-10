@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   tableWrapper: {
     margin: theme.spacing(1),
-    maxHeight: '80vh',
+    maxHeight: '95%',
     overflow: 'auto'
   }
 }));
