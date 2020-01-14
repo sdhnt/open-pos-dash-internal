@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
-import Sales from './Sales';
+import Revenue from './Revenue';
 import Inventory from './Inventory';
 
 const useStyles = makeStyles(theme => ({
@@ -48,7 +48,7 @@ const Business = () => {
       </div>
       <div className={classes.content}>
         <div className={classes.section}>
-          <Sales business={business} />
+          <Revenue business={business} />
         </div>
         <div className={classes.section}>
           <Inventory business={business} />

@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Sales = props => {
+const Revenue = props => {
   const classes = useStyles();
   const { business } = props;
 
@@ -85,4 +85,4 @@ const Sales = props => {
   );
 };
 
-export default Sales;
+export default Revenue;
