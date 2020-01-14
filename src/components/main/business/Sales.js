@@ -1,13 +1,13 @@
 import React from 'react';
 import { makeStyles, Container, Typography, Paper } from '@material-ui/core';
 import moment from 'moment';
-import Chart from './Chart';
 import {
   getAverageSales,
   getAnnualPerformance,
   getPerformanceByDays,
   getMonthlyPerformance
 } from './functions';
+import MonthlyChart from './MonthlyChart';
 import PREChart from './PREChart';
 
 const useStyles = makeStyles(theme => ({
@@ -76,13 +76,7 @@ const Sales = props => {
         <Typography variant="h5">Revenue</Typography>
       </div>
       <Paper className={classes.paper}>
-        <Chart
-          title="Total sales in the last 12 months"
-          data={annualPerformance}
-          dataKeyX="month"
-          dataKeysY={['Revenue']}
-        />
-        {/*<Table headers={} rows={} />*/}
+        <MonthlyChart data={annualPerformance} />
       </Paper>
       <Paper className={classes.paper}>
         <PREChart data={PREAData} />

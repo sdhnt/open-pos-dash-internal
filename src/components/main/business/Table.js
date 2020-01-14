@@ -19,7 +19,7 @@ const Table = props => {
   const { headers, rows } = props;
   return (
     <TableContainer component={Paper} classes={{ root: classes.table }}>
-      <MuiTable aria-label="simple table">
+      <MuiTable {...props} aria-label="simple table">
         <TableHead>
           <TableRow>
             {headers.map((header, index) => (

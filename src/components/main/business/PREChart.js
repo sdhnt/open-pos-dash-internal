@@ -8,6 +8,8 @@ import {
   MenuItem
 } from '@material-ui/core';
 import Chart from './Chart';
+import Button from '@material-ui/core/Button';
+import Table from './Table';
 
 const useStyles = makeStyles(theme => ({
   sales: {
@@ -18,6 +20,9 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(0.5),
     minWidth: 160,
     float: 'right'
+  },
+  button: {
+    float: 'right'
   }
 }));
 
@@ -26,6 +31,7 @@ const PREChart = props => {
   const { data } = props;
   const [chartData, setChartData] = useState(data[0]);
   const [index, setIndex] = useState(0);
+  const [show, setShow] = useState(false);
 
   const handleChange = event => {
     const { value } = event.target;
@@ -62,6 +68,38 @@ const PREChart = props => {
         dataKeyX="date"
         dataKeysY={['Revenue', 'Profit', 'Expenses']}
       />
+      <Button
+        color="primary"
+        className={classes.button}
+        onClick={() => setShow(!show)}
+      >
+        Show table
+      </Button>
+      <div style={{ clear: 'both' }} />
+      {show ? (
+        <Table
+          size="small"
+          headers={[
+            {
+              key: 'date',
+              text: 'Date'
+            },
+            {
+              key: 'Revenue',
+              text: 'Total sales'
+            },
+            {
+              key: 'Profit',
+              text: 'Profit'
+            },
+            {
+              key: 'Expenses',
+              text: 'Expenses'
+            }
+          ]}
+          rows={chartData.data}
+        />
+      ) : null}
     </div>
   );
 };
