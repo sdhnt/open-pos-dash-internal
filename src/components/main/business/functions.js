@@ -157,7 +157,7 @@ export const getOrderData = (transactions, period) => {
       }
     });
     monthlyData.push({
-      month: month.toDate(),
+      month: month.format('MMM'),
       total: -1 * total,
       average:
         orderCount !== 0

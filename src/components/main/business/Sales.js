@@ -82,6 +82,7 @@ const Sales = props => {
           dataKeyX="month"
           dataKeysY={['Revenue']}
         />
+        {/*<Table headers={} rows={} />*/}
       </Paper>
       <Paper className={classes.paper}>
         <PREChart data={PREAData} />
