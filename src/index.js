@@ -9,12 +9,13 @@ import ThemeProvider from '@material-ui/styles/ThemeProvider';
 let theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#e2e2e2',
-      main: '#301924',
-      dark: '#3b5998'
+      main: '#301924'
     },
     secondary: {
-      main: '#FFA500'
+      main: '#795548'
+    },
+    tertiary: {
+      main: '#607d8b'
     }
   }
 });

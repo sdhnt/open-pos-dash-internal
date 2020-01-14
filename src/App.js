@@ -6,7 +6,7 @@ import {
   Redirect
 } from 'react-router-dom';
 import Login from './components/main/Login';
-import Dashboard from './components/main/Dashboard';
+import Home from './components/Home';
 import './App.css';
 
 const auth = {
@@ -43,7 +43,7 @@ const PrivateRoute = ({ children, ...rest }) => {
 
 const App = () => {
   if (process.env.NODE_ENV === 'development') {
-    return <Dashboard />;
+    auth.authenticate();
   }
   return (
     <Router>
@@ -53,7 +53,7 @@ const App = () => {
             <Login auth={auth} />
           </Route>
           <PrivateRoute exact path="/">
-            <Dashboard />
+            <Home />
           </PrivateRoute>
         </Switch>
       </div>

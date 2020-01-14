@@ -9,3 +9,7 @@
       url('./assets/fonts/megrim-regular-fonts/megrim-regular.ttf')
       format('truetype'); /* Safari, Android, iOS */
 }
+
+.recharts-responsive-container {
+  margin: auto;
+}

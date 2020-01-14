@@ -10,19 +10,18 @@ import {
   TableBody,
   TablePagination
 } from '@material-ui/core';
-import { FirebaseDB as db } from '../../constants/firebase';
-import BusinessModal from '../complement/BusinessModal';
+import { FirebaseDB as db } from '../../../constants/firebase';
+import BusinessModal from './BusinessModal';
 
 const useStyles = makeStyles(theme => ({
-  main: {
-    margin: '2vh 2vw',
-    padding: '2vh 2vw'
-  },
   header: {
-    margin: '1vh auto'
+    background: theme.palette.primary.main,
+    color: theme.palette.primary.contrastText,
+    padding: theme.spacing(2)
   },
   tableWrapper: {
-    maxHeight: '80vh',
+    margin: theme.spacing(1),
+    maxHeight: '95%',
     overflow: 'auto'
   }
 }));
@@ -70,7 +69,7 @@ const Dashboard = () => {
       const newRows = [],
         newUsers = [];
       await db
-        .collection('users')
+        .collection('users-archive')
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
@@ -89,12 +88,12 @@ const Dashboard = () => {
   }, [rows.length, users.length]);
 
   return (
-    <Paper className={classes.main}>
+    <div className={classes.main}>
       <div className={classes.header}>
         <Typography variant={'h3'}>Dashboard</Typography>
       </div>
 
-      <div className={classes.tableWrapper}>
+      <Paper className={classes.tableWrapper}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
@@ -147,9 +146,9 @@ const Dashboard = () => {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
-      </div>
+      </Paper>
       <BusinessModal open={open} user={focusedUser} handleClose={handleClose} />
-    </Paper>
+    </div>
   );
 };
 
