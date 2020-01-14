@@ -100,22 +100,25 @@ export const getPerformanceByDays = (performances, days) => {
   return filteredPerformances;
 };
 
-export const getProfitMargins = (products, { priceType }) => {
-  let profitMargins = 0;
-  let countedProducts = 0;
-  products.forEach(product => {
-    const price = Number(product[priceType]);
-    const cost = Number(product.cost);
-    if (!isNaN(price) && !isNaN(cost) && price > cost) {
-      profitMargins += (price - cost) / price;
-      countedProducts++;
-    }
+export const getProfitMargins = (products, marginTypes) => {
+  return marginTypes.map(marginType => {
+    let profitMargins = 0;
+    let countedProducts = 0;
+    products.forEach(product => {
+      const price = Number(product[marginType.priceType]);
+      const cost = Number(product.cost);
+      if (!isNaN(price) && !isNaN(cost) && price > cost) {
+        profitMargins += (price - cost) / price;
+        countedProducts++;
+      }
+    });
+    return {
+      ...marginType,
+      margin:
+        countedProducts !== 0
+          ? Math.round((profitMargins / countedProducts) * 1000) / 1000
+          : 0,
+      countedProducts
+    };
   });
-  return {
-    margin:
-      countedProducts !== 0
-        ? Math.round((profitMargins / countedProducts) * 1000) / 1000
-        : 0,
-    countedProducts
-  };
 };
