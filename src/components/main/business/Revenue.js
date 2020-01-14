@@ -31,11 +31,11 @@ const Revenue = props => {
   }));
 
   const businessPerformance7Days = getPerformanceByDays(
-    business.businessPerformance,
+    business.transactions,
     7
   );
   const businessPerformance30Days = getPerformanceByDays(
-    business.businessPerformance,
+    business.transactions,
     30
   );
   const businessPerformanceThisMonth = getMonthlyPerformance(

@@ -85,19 +85,18 @@ export const getMonthlyPerformance = (transactions, month) => {
   return monthlyPerformance;
 };
 
-export const getPerformanceByDays = (performances, days) => {
-  const filteredPerformances = performances.slice(
-    performances.length - days - 1
-  );
-  filteredPerformances.pop();
-  let date = moment()
-    .subtract(days + 1, 'day')
-    .startOf('day');
-  filteredPerformances.forEach(performance => {
-    performance.date = date.format('D');
-    date = date.add(1, 'day');
-  });
-  return filteredPerformances;
+export const getPerformanceByDays = (transactions, days) => {
+  const dailyPerformance = [];
+  for (let i = days - 1; i > 0; i--) {
+    const day = moment()
+      .startOf('day')
+      .subtract(i, 'day');
+    const transactionsThisDay = filterTransactionsByDay(transactions, day);
+    const businessPerformance = getBusinessPerformance(transactionsThisDay);
+    businessPerformance.date = day.format('D');
+    dailyPerformance.push(businessPerformance);
+  }
+  return dailyPerformance;
 };
 
 export const getProductData = (products, marginTypes) => {
