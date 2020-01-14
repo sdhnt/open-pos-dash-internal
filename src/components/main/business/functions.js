@@ -114,7 +114,7 @@ export const getProductData = (products, marginTypes) => {
         const saleValue = price - cost;
         totalSaleValue += saleValue;
         profitMargins += saleValue / price;
-        totalInventoryValue += price * cost;
+        totalInventoryValue += price * quantity;
         countedProducts++;
       }
     });
@@ -126,7 +126,7 @@ export const getProductData = (products, marginTypes) => {
           : 0,
       margin:
         countedProducts !== 0
-          ? Math.round((profitMargins / countedProducts) * 1000) / 1000
+          ? Math.round((profitMargins / countedProducts) * 1000) / 10
           : 0,
       totalInventoryValue,
       countedProducts

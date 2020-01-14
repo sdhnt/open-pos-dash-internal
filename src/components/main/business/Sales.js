@@ -30,11 +30,11 @@ const Sales = props => {
     Revenue: performance.revenue
   }));
 
-  const businessPerfomance7Days = getPerformanceByDays(
+  const businessPerformance7Days = getPerformanceByDays(
     business.businessPerformance,
     7
   );
-  const businessPerfomance30Days = getPerformanceByDays(
+  const businessPerformance30Days = getPerformanceByDays(
     business.businessPerformance,
     30
   );
@@ -50,8 +50,8 @@ const Sales = props => {
   );
 
   let PREAData = [
-    businessPerfomance7Days,
-    businessPerfomance30Days,
+    businessPerformance7Days,
+    businessPerformance30Days,
     businessPerformanceThisMonth,
     businessPerformanceLastMonth
   ];
@@ -73,11 +73,11 @@ const Sales = props => {
   return (
     <Container>
       <div className={classes.header}>
-        <Typography variant="h5">Sales and Income</Typography>
+        <Typography variant="h5">Revenue</Typography>
       </div>
       <Paper className={classes.paper}>
         <Chart
-          title="Average sales in the last 12 months"
+          title="Total sales in the last 12 months"
           data={annualPerformance}
           dataKeyX="month"
           dataKeysY={['Revenue']}

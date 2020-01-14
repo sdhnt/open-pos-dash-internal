@@ -34,6 +34,8 @@ const Inventory = props => {
     { title: 'Wholesale', priceType: 'wholesale_price' }
   ]);
 
+  console.log(productData);
+
   const orderData = getOrderData(business.transactions, 6);
 
   return (
@@ -61,7 +63,7 @@ const Inventory = props => {
                     {row.title}
                   </TableCell>
                   <TableCell align="center">{row.averageSaleValue}</TableCell>
-                  <TableCell align="center">{row.margin * 100}%</TableCell>
+                  <TableCell align="center">{row.margin}%</TableCell>
                   <TableCell align="center">
                     {row.totalInventoryValue}
                   </TableCell>
