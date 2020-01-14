@@ -133,3 +133,39 @@ export const getProductData = (products, marginTypes) => {
     };
   });
 };
+
+export const getOrderData = (transactions, period) => {
+  const monthlyData = [];
+  for (let i = period - 1; i >= 0; i--) {
+    const month = moment()
+      .subtract(i, 'month')
+      .startOf('month');
+    const filteredTransactions = filterTransactionsByMonth(transactions, month);
+    let total = 0;
+    let largest = 0;
+    let orderCount = 0;
+    filteredTransactions.forEach(transaction => {
+      const transactionAmount = transaction.totalatax;
+      if (
+        transactionAmount < 0 &&
+        transaction.itemslist.length > 0 &&
+        transaction.itemslist[0].code !== 'EXPENSE'
+      ) {
+        total += transactionAmount;
+        largest = transactionAmount < largest ? transactionAmount : largest;
+        orderCount++;
+      }
+    });
+    monthlyData.push({
+      month: month.toDate(),
+      total: -1 * total,
+      average:
+        orderCount !== 0
+          ? (-1 * Math.round((total / orderCount) * 100)) / 100
+          : 0,
+      largest: -1 * largest,
+      orderCount
+    });
+  }
+  return monthlyData;
+};
