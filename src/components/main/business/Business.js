@@ -3,6 +3,7 @@ import { makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
 import Revenue from './Revenue';
 import Inventory from './Inventory';
+import Loan from './Loan';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,6 +53,9 @@ const Business = () => {
         </div>
         <div className={classes.section}>
           <Inventory business={business} />
+        </div>
+        <div className={classes.section}>
+          <Loan businessId={business.id} />
         </div>
       </div>
     </div>
