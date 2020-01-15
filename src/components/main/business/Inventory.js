@@ -23,10 +23,15 @@ const Inventory = props => {
   const classes = useStyles();
   const { business } = props;
 
-  const productData = getProductData(business.products, [
+  const rawProductData = getProductData(business.products, [
     { title: 'Retail', priceType: 'price' },
     { title: 'Wholesale', priceType: 'wholesale_price' }
   ]);
+
+  const productData = rawProductData.map(data => ({
+    ...data,
+    margin: `${data.margin}%`
+  }));
 
   const orderData = getOrderData(business.transactions, 6);
 
