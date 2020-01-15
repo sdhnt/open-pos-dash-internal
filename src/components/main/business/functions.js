@@ -29,7 +29,8 @@ export const filterTransactionsByMonth = (transactions, month) => {
 export const getBusinessPerformance = transactions => {
   const performance = { revenue: 0, profit: 0, expenses: 0 };
   transactions.forEach(transaction => {
-    const transactionAmount = transaction.totalatax;
+    const transactionAmount = Number(transaction.totalatax);
+    if (isNaN(transactionAmount)) return;
     if (transactionAmount > 0) {
       performance.revenue += transactionAmount;
       let transactionCost = 0;
@@ -41,6 +42,9 @@ export const getBusinessPerformance = transactions => {
         });
       performance.profit += transactionAmount - transactionCost;
     } else performance.expenses += transactionAmount;
+  });
+  Object.entries(performance).forEach(([key, value]) => {
+    performance[key] = Math.round(value);
   });
   return performance;
 };

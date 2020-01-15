@@ -37,7 +37,7 @@ export const financial = [
     sixMonths: 0.71
   },
   {
-    ratio: 'Income Debt',
+    ratio: 'Income / debt',
     threeMonths: 2.31,
     sixMonths: 2.18
   },
