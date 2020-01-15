@@ -3,8 +3,13 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { getProductData, getOrderData } from './functions';
+import {
+  getProductData,
+  getOrderData,
+  getInventoryTransactionsData
+} from './functions';
 import Table from './Table';
+import InventoryTransactionsChart from './InventoryTransactionsChart';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -34,6 +39,8 @@ const Inventory = props => {
   }));
 
   const orderData = getOrderData(business.transactions, 6);
+
+  const transactionsData = getInventoryTransactionsData(business.transactions);
 
   return (
     <Container>
@@ -94,6 +101,10 @@ const Inventory = props => {
           ]}
           rows={orderData}
         />
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <InventoryTransactionsChart data={transactionsData} />
       </Paper>
     </Container>
   );

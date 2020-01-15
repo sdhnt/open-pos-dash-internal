@@ -91,7 +91,7 @@ export const getMonthlyPerformance = (transactions, month) => {
 
 export const getPerformanceByDays = (transactions, days) => {
   const dailyPerformance = [];
-  for (let i = days - 1; i > 0; i--) {
+  for (let i = days; i > 0; i--) {
     const day = moment()
       .startOf('day')
       .subtract(i, 'day');
@@ -171,4 +171,67 @@ export const getOrderData = (transactions, period) => {
     });
   }
   return monthlyData;
+};
+
+export const getInventoryTransactionsData = transactions => {
+  const daysLastMonth = moment()
+    .subtract(1, 'month')
+    .daysInMonth();
+  const daysThisMonth = Number(moment().format('D'));
+  let totalDays = daysThisMonth;
+  for (let i = 1; i < 6; i++)
+    totalDays += moment()
+      .subtract(i, 'month')
+      .daysInMonth();
+
+  const rawData = [];
+  for (let i = totalDays - 1; i > 0; i--) {
+    const day = moment()
+      .startOf('day')
+      .subtract(i, 'day');
+    const transactionsThisDay = filterTransactionsByDay(transactions, day);
+    let totalOrderAmount = 0;
+    transactionsThisDay.forEach(transaction => {
+      const transactionAmount = Number(transaction.totalatax);
+      if (isNaN(transactionAmount)) return;
+      if (
+        transactionAmount < 0 &&
+        transaction.itemslist.length > 0 &&
+        transaction.itemslist[0].code !== 'EXPENSE'
+      )
+        totalOrderAmount += transactionAmount;
+    });
+    rawData.push({
+      date: moment(day).format('D'),
+      totalOrderAmount: -1 * totalOrderAmount
+    });
+  }
+
+  const length = rawData.length;
+  const periods = [
+    { start: length - 7 },
+    { start: length - 30 },
+    { start: length - daysThisMonth + 1 },
+    {
+      start: length - daysThisMonth - daysLastMonth + 1,
+      end: length - daysThisMonth + 1
+    },
+    {
+      start:
+        length -
+        (daysThisMonth +
+          daysLastMonth +
+          moment()
+            .subtract(2, 'month')
+            .daysInMonth()) +
+        1
+    },
+    {
+      start: 0
+    }
+  ];
+  const data = periods.map(({ start, end }) => ({
+    data: rawData.slice(start, end)
+  }));
+  return data;
 };
