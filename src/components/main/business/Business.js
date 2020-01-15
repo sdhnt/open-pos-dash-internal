@@ -4,6 +4,7 @@ import { FirebaseDB as db } from '../../../constants/firebase';
 import Revenue from './Revenue';
 import Inventory from './Inventory';
 import Loan from './Loan';
+import Financial from './Financial';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,6 +57,9 @@ const Business = () => {
         </div>
         <div className={classes.section}>
           <Loan businessId={business.id} />
+        </div>
+        <div className={classes.section}>
+          <Financial />
         </div>
       </div>
     </div>
