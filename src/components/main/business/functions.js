@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { periods } from './constants';
 
 const filterTransactionsByDay = (transactions, day) => {
   return transactions.filter(
@@ -83,6 +84,32 @@ export const getPerformanceData = transactions => {
     return { date: moment(day).format('D'), ...performance };
   };
   return getDataOverPeriod(transactions, callback);
+};
+
+export const getCashFlowData = transactions => {
+  const inOrderCallback = (transactionsThisDay, day) => {
+    const rawPerformance = getBusinessPerformance(transactionsThisDay);
+    const performance = {
+      ...rawPerformance,
+      expenses: -1 * rawPerformance.expenses
+    };
+    return { date: moment(day).format('D'), ...performance };
+  };
+  const postOrderCallback = data => {
+    return data.map((periodData, periodIndex) => {
+      let totalRevenue = 0;
+      let totalExpenses = 0;
+      periodData.data.forEach(dateData => {
+        totalRevenue += dateData.revenue;
+        totalExpenses += dateData.expenses;
+      });
+      return {
+        period: periods[periodIndex],
+        netCashFlow: totalRevenue - totalExpenses
+      };
+    });
+  };
+  return getDataOverPeriod(transactions, inOrderCallback, postOrderCallback);
 };
 
 export const getProductData = (products, marginTypes) => {
@@ -176,7 +203,11 @@ export const getInventoryTransactionsData = transactions => {
   return getDataOverPeriod(transactions, callback);
 };
 
-const getDataOverPeriod = (transactions, callback) => {
+const getDataOverPeriod = (
+  transactions,
+  inOrderCallback,
+  postOrderCallback
+) => {
   const daysLastMonth = moment()
     .subtract(1, 'month')
     .daysInMonth();
@@ -193,7 +224,7 @@ const getDataOverPeriod = (transactions, callback) => {
       .startOf('day')
       .subtract(i, 'day');
     const transactionsThisDay = filterTransactionsByDay(transactions, day);
-    const element = callback(transactionsThisDay, day);
+    const element = inOrderCallback(transactionsThisDay, day);
     rawData.push(element);
   }
 
@@ -223,5 +254,6 @@ const getDataOverPeriod = (transactions, callback) => {
   const data = periods.map(({ start, end }) => ({
     data: rawData.slice(start, end)
   }));
-  return data;
+  if (!postOrderCallback) return data;
+  return postOrderCallback(data);
 };

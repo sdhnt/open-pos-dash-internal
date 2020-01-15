@@ -3,10 +3,12 @@ import { makeStyles, Container, Typography, Paper } from '@material-ui/core';
 import {
   getAverageSales,
   getAnnualPerformance,
-  getPerformanceData
+  getPerformanceData,
+  getCashFlowData
 } from './functions';
 import MonthlyChart from './MonthlyChart';
 import PREChart from './PREChart';
+import CashFlow from './CashFlow';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -34,6 +36,8 @@ const Revenue = props => {
     averageSales: getAverageSales(periodData.data)
   }));
 
+  const cashFlowData = getCashFlowData(business.transactions);
+
   return (
     <Container>
       <div className={classes.header}>
@@ -44,6 +48,9 @@ const Revenue = props => {
       </Paper>
       <Paper className={classes.paper}>
         <PREChart data={PREAData} />
+      </Paper>
+      <Paper className={classes.paper}>
+        <CashFlow data={cashFlowData} />
       </Paper>
     </Container>
   );
