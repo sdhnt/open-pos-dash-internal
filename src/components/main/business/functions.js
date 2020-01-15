@@ -49,13 +49,13 @@ export const getBusinessPerformance = transactions => {
   return performance;
 };
 
-export const getAverageSales = performances => {
+export const getAverageSales = data => {
   let totalSales = 0;
-  performances.forEach(performance => {
-    const amount = performance.revenue;
+  data.forEach(dailyData => {
+    const amount = dailyData.Revenue;
     if (amount > 0) totalSales += amount;
   });
-  return Math.round((totalSales / performances.length) * 100) / 100;
+  return Math.round((totalSales / data.length) * 100) / 100;
 };
 
 export const getAnnualPerformance = transactions => {
@@ -72,35 +72,17 @@ export const getAnnualPerformance = transactions => {
   return annualPerformance;
 };
 
-export const getMonthlyPerformance = (transactions, month) => {
-  const monthlyPerformance = [];
-  const length = moment(month).daysInMonth();
-  for (let i = 0; i < length; i++) {
-    const day = moment(month)
-      .startOf('month')
-      .add(i, 'day');
-    const transactionsThisDay = filterTransactionsByDay(transactions, day);
-    if (day.isBefore(moment().startOf('day'))) {
-      const businessPerformance = getBusinessPerformance(transactionsThisDay);
-      businessPerformance.date = day.format('D');
-      monthlyPerformance.push(businessPerformance);
-    }
-  }
-  return monthlyPerformance;
-};
-
-export const getPerformanceByDays = (transactions, days) => {
-  const dailyPerformance = [];
-  for (let i = days; i > 0; i--) {
-    const day = moment()
-      .startOf('day')
-      .subtract(i, 'day');
-    const transactionsThisDay = filterTransactionsByDay(transactions, day);
-    const businessPerformance = getBusinessPerformance(transactionsThisDay);
-    businessPerformance.date = day.format('D');
-    dailyPerformance.push(businessPerformance);
-  }
-  return dailyPerformance;
+export const getPerformanceData = transactions => {
+  const callback = (transactionsThisDay, day) => {
+    const rawPerformance = getBusinessPerformance(transactionsThisDay);
+    const performance = {
+      Revenue: rawPerformance.revenue,
+      Profit: rawPerformance.profit,
+      Expenses: -1 * rawPerformance.expenses
+    };
+    return { date: moment(day).format('D'), ...performance };
+  };
+  return getDataOverPeriod(transactions, callback);
 };
 
 export const getProductData = (products, marginTypes) => {

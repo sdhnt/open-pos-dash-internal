@@ -58,6 +58,8 @@ const PREChart = props => {
             <MenuItem value={1}>Last 30 Days</MenuItem>
             <MenuItem value={2}>This Month</MenuItem>
             <MenuItem value={3}>Last Month</MenuItem>
+            <MenuItem value={4}>Last 3 Months</MenuItem>
+            <MenuItem value={5}>Last 6 Months</MenuItem>
           </Select>
         </FormControl>
       </div>

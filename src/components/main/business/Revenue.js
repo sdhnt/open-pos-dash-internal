@@ -1,11 +1,9 @@
 import React from 'react';
 import { makeStyles, Container, Typography, Paper } from '@material-ui/core';
-import moment from 'moment';
 import {
   getAverageSales,
   getAnnualPerformance,
-  getPerformanceByDays,
-  getMonthlyPerformance
+  getPerformanceData
 } from './functions';
 import MonthlyChart from './MonthlyChart';
 import PREChart from './PREChart';
@@ -30,45 +28,11 @@ const Revenue = props => {
     Revenue: performance.revenue
   }));
 
-  const businessPerformance7Days = getPerformanceByDays(
-    business.transactions,
-    7
-  );
-  const businessPerformance30Days = getPerformanceByDays(
-    business.transactions,
-    30
-  );
-  const businessPerformanceThisMonth = getMonthlyPerformance(
-    business.transactions,
-    moment().startOf('month')
-  );
-  const businessPerformanceLastMonth = getMonthlyPerformance(
-    business.transactions,
-    moment()
-      .subtract(1, 'month')
-      .startOf('month')
-  );
-
-  let PREAData = [
-    businessPerformance7Days,
-    businessPerformance30Days,
-    businessPerformanceThisMonth,
-    businessPerformanceLastMonth
-  ];
-  PREAData = PREAData.map(data => ({
-    data,
-    averageSales: getAverageSales(data)
+  let PREAData = getPerformanceData(business.transactions);
+  PREAData = PREAData.map(periodData => ({
+    data: periodData.data,
+    averageSales: getAverageSales(periodData.data)
   }));
-
-  PREAData = PREAData.map(dataArray => {
-    dataArray.data = dataArray.data.map(performance => ({
-      date: performance.date,
-      Profit: performance.profit,
-      Revenue: performance.revenue,
-      Expenses: -1 * performance.expenses
-    }));
-    return dataArray;
-  });
 
   return (
     <Container>
