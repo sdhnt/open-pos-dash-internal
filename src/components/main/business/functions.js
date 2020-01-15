@@ -174,6 +174,27 @@ export const getOrderData = (transactions, period) => {
 };
 
 export const getInventoryTransactionsData = transactions => {
+  const callback = (transactionsThisDay, day) => {
+    let totalOrderAmount = 0;
+    transactionsThisDay.forEach(transaction => {
+      const transactionAmount = Number(transaction.totalatax);
+      if (isNaN(transactionAmount)) return;
+      if (
+        transactionAmount < 0 &&
+        transaction.itemslist.length > 0 &&
+        transaction.itemslist[0].code !== 'EXPENSE'
+      )
+        totalOrderAmount += transactionAmount;
+    });
+    return {
+      date: moment(day).format('D'),
+      totalOrderAmount: -1 * totalOrderAmount
+    };
+  };
+  return getDataOverPeriod(transactions, callback);
+};
+
+const getDataOverPeriod = (transactions, callback) => {
   const daysLastMonth = moment()
     .subtract(1, 'month')
     .daysInMonth();
@@ -190,21 +211,8 @@ export const getInventoryTransactionsData = transactions => {
       .startOf('day')
       .subtract(i, 'day');
     const transactionsThisDay = filterTransactionsByDay(transactions, day);
-    let totalOrderAmount = 0;
-    transactionsThisDay.forEach(transaction => {
-      const transactionAmount = Number(transaction.totalatax);
-      if (isNaN(transactionAmount)) return;
-      if (
-        transactionAmount < 0 &&
-        transaction.itemslist.length > 0 &&
-        transaction.itemslist[0].code !== 'EXPENSE'
-      )
-        totalOrderAmount += transactionAmount;
-    });
-    rawData.push({
-      date: moment(day).format('D'),
-      totalOrderAmount: -1 * totalOrderAmount
-    });
+    const element = callback(transactionsThisDay, day);
+    rawData.push(element);
   }
 
   const length = rawData.length;
