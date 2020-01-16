@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
 import Revenue from './Revenue';
+import Expenses from './Expenses';
 import Inventory from './Inventory';
 import Loan from './Loan';
 import Financial from './Financial';
@@ -51,6 +52,9 @@ const Business = () => {
       <div className={classes.content}>
         <div className={classes.section}>
           <Revenue business={business} />
+        </div>
+        <div className={classes.section}>
+          <Expenses business={business} />
         </div>
         <div className={classes.section}>
           <Inventory business={business} />
