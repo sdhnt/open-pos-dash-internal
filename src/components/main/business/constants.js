@@ -6,3 +6,11 @@ export const periods = [
   'Last 3 months',
   'Last 6 months'
 ];
+
+export const expenseCategories = [
+  'Transportation',
+  'Salaries',
+  'Utilities',
+  'Depreciation',
+  'Miscellaneous'
+];

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { periods } from './constants';
+import { expenseCategories, periods } from './constants';
 
 const filterTransactionsByDay = (transactions, day) => {
   return transactions.filter(
@@ -108,6 +108,67 @@ export const getCashFlowData = transactions => {
         netCashFlow: totalRevenue - totalExpenses
       };
     });
+  };
+  return getDataOverPeriod(transactions, inOrderCallback, postOrderCallback);
+};
+
+export const getExpensesData = transactions => {
+  const inOrderCallback = (transactionsThisDay, day) => {
+    const data = {};
+    expenseCategories.forEach(category => {
+      data[category] = 0;
+    });
+    transactionsThisDay.forEach(transaction => {
+      const transactionAmount = Number(transaction.totalatax);
+      if (isNaN(transactionAmount)) return;
+      if (
+        transactionAmount < 0 &&
+        transaction.itemslist.length &&
+        transaction.itemslist[0].code === 'EXPENSE'
+      ) {
+        transaction.itemslist.forEach(item => {
+          data[item.cat] += -1 * Number(item.price);
+        });
+      }
+    });
+    data.date = moment(day).format('D');
+    return data;
+  };
+  const postOrderCallback = rawData => {
+    const periods = [
+      'sevenDays',
+      'thirtyDays',
+      'thisMonth',
+      'lastMonth',
+      'threeMonths',
+      'sixMonths'
+    ];
+    const nullPeriodData = {};
+    periods.forEach(period => {
+      nullPeriodData[period] = 0;
+    });
+    const data = expenseCategories
+      .concat(['Daily average', 'Total over period'])
+      .map(category => ({
+        category,
+        ...nullPeriodData
+      }));
+    rawData.forEach((periodData, index) => {
+      const period = periods[index];
+      periodData.data.forEach(dateData => {
+        Object.entries(dateData).forEach(([key, value]) => {
+          if (expenseCategories.includes(key)) {
+            const categoryData = data.find(element => element.category === key);
+            categoryData[period] += value;
+            data[data.length - 1][period] += value;
+          }
+        });
+      });
+      data[data.length - 2][period] = Math.round(
+        data[data.length - 1][period] / periodData.data.length
+      );
+    });
+    return data;
   };
   return getDataOverPeriod(transactions, inOrderCallback, postOrderCallback);
 };
