@@ -6,6 +6,7 @@ import Expenses from './Expenses';
 import Inventory from './Inventory';
 import Loan from './Loan';
 import Financial from './Financial';
+import Loading from '../../complement/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,7 +43,7 @@ const Business = () => {
     fetchData();
   }, [businessId]);
 
-  if (!business) return <>Loading</>;
+  if (!business) return <Loading />;
 
   return (
     <div className={classes.root}>

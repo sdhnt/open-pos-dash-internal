@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
 import BusinessModal from './BusinessModal';
+import Loading from '../../complement/Loading';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -44,26 +45,6 @@ const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [focusedUser, setFocusedUser] = useState({});
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const handleOpen = userId => {
-    setOpen(true);
-    const user = users.find(user => userId === user.id);
-    setFocusedUser(user);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setFocusedUser({});
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const newRows = [],
@@ -86,6 +67,28 @@ const Dashboard = () => {
     };
     fetchData();
   }, [rows.length, users.length]);
+
+  if (users.length === 0) return <Loading />;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const handleOpen = userId => {
+    setOpen(true);
+    const user = users.find(user => userId === user.id);
+    setFocusedUser(user);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setFocusedUser({});
+  };
 
   return (
     <div className={classes.main}>

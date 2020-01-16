@@ -65,7 +65,7 @@ const Inventory = props => {
             },
             {
               key: 'totalInventoryValue',
-              text: 'Total Inventory Value'
+              text: 'Total inventory value'
             },
             {
               key: 'countedProducts',
