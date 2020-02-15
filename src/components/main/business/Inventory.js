@@ -1,6 +1,15 @@
 import React from 'react';
-import { Container, makeStyles, Paper, Typography } from '@material-ui/core';
-import { getProfitMargins } from './functions';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import {
+  getProductData,
+  getOrderData,
+  getInventoryTransactionsData
+} from './functions';
+import Table from './Table';
+import InventoryTransactionsChart from './InventoryTransactionsChart';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -9,6 +18,9 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(2),
     margin: theme.spacing(1)
+  },
+  table: {
+    margin: theme.spacing(1)
   }
 }));
 
@@ -16,7 +28,19 @@ const Inventory = props => {
   const classes = useStyles();
   const { business } = props;
 
-  const data = getProfitMargins(business.products, { priceType: 'price' });
+  const rawProductData = getProductData(business.products, [
+    { title: 'Retail', priceType: 'price' },
+    { title: 'Wholesale', priceType: 'wholesale_price' }
+  ]);
+
+  const productData = rawProductData.map(data => ({
+    ...data,
+    margin: `${data.margin}%`
+  }));
+
+  const orderData = getOrderData(business.transactions, 6);
+
+  const transactionsData = getInventoryTransactionsData(business.transactions);
 
   return (
     <Container>
@@ -24,20 +48,63 @@ const Inventory = props => {
         <Typography variant="h5">Inventory</Typography>
       </div>
       <Paper className={classes.paper}>
-        {data.countedProducts !== 0 ? (
-          <>
-            <Typography variant={'body1'}>
-              Average retail profit margin: {data.margin * 100}%
-            </Typography>
-            <Typography variant={'body1'}>
-              Counted number of products: {data.countedProducts}
-            </Typography>
-          </>
-        ) : (
-          <Typography variant={'body1'}>
-            Product information incomplete
-          </Typography>
-        )}
+        <Typography variant={'h6'}>Profit margins</Typography>
+        <Table
+          headers={[
+            {
+              key: 'title',
+              text: 'Price type'
+            },
+            {
+              key: 'averageSaleValue',
+              text: 'Average sale value'
+            },
+            {
+              key: 'margin',
+              text: 'Average margin'
+            },
+            {
+              key: 'totalInventoryValue',
+              text: 'Total inventory value'
+            },
+            {
+              key: 'countedProducts',
+              text: 'Counted number of products'
+            }
+          ]}
+          rows={productData}
+        />
+
+        <Typography variant={'h6'}>Inventory order size</Typography>
+        <Table
+          headers={[
+            {
+              key: 'month',
+              text: 'Month'
+            },
+            {
+              key: 'total',
+              text: 'Total'
+            },
+            {
+              key: 'average',
+              text: 'Average'
+            },
+            {
+              key: 'largest',
+              text: 'Largest'
+            },
+            {
+              key: 'orderCount',
+              text: 'Order count'
+            }
+          ]}
+          rows={orderData}
+        />
+      </Paper>
+
+      <Paper className={classes.paper}>
+        <InventoryTransactionsChart data={transactionsData} />
       </Paper>
     </Container>
   );

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
-import Sales from './Sales';
+import Revenue from './Revenue';
+import Expenses from './Expenses';
 import Inventory from './Inventory';
+import Loan from './Loan';
+import Financial from './Financial';
+import Loading from '../../complement/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -39,7 +43,7 @@ const Business = () => {
     fetchData();
   }, [businessId]);
 
-  if (!business) return <>Loading</>;
+  if (!business) return <Loading />;
 
   return (
     <div className={classes.root}>
@@ -48,10 +52,19 @@ const Business = () => {
       </div>
       <div className={classes.content}>
         <div className={classes.section}>
-          <Sales business={business} />
+          <Revenue business={business} />
+        </div>
+        <div className={classes.section}>
+          <Expenses business={business} />
         </div>
         <div className={classes.section}>
           <Inventory business={business} />
+        </div>
+        <div className={classes.section}>
+          <Loan businessId={business.id} />
+        </div>
+        <div className={classes.section}>
+          <Financial />
         </div>
       </div>
     </div>

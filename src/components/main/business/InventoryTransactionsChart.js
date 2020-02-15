@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import {
-  makeStyles,
-  Typography,
   FormControl,
   InputLabel,
-  Select,
-  MenuItem
+  makeStyles,
+  MenuItem,
+  Select
 } from '@material-ui/core';
 import Chart from './Chart';
 import Button from '@material-ui/core/Button';
@@ -26,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PREChart = props => {
+const InventoryTransactionsChart = props => {
   const classes = useStyles();
   const { data } = props;
   const [chartData, setChartData] = useState(data[0]);
@@ -42,9 +41,6 @@ const PREChart = props => {
   return (
     <div>
       <div>
-        <div className={classes.sales}>
-          <Typography>Average sales: {chartData.averageSales}</Typography>
-        </div>
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="period">Period</InputLabel>
           <Select
@@ -65,10 +61,10 @@ const PREChart = props => {
       </div>
       <div style={{ clear: 'both' }} />
       <Chart
-        title="Revenue, Profit and Expenses"
+        title="Inventory transaction"
         data={chartData.data}
         dataKeyX="date"
-        dataKeysY={['Revenue', 'Profit', 'Expenses']}
+        dataKeysY={['totalOrderAmount']}
       />
       <Button
         color="primary"
@@ -87,16 +83,8 @@ const PREChart = props => {
               text: 'Date'
             },
             {
-              key: 'Revenue',
-              text: 'Total sales'
-            },
-            {
-              key: 'Profit',
-              text: 'Profit'
-            },
-            {
-              key: 'Expenses',
-              text: 'Expenses'
+              key: 'totalOrderAmount',
+              text: 'Total order amount'
             }
           ]}
           rows={chartData.data}
@@ -106,4 +94,4 @@ const PREChart = props => {
   );
 };
 
-export default PREChart;
+export default InventoryTransactionsChart;
