@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import Revenue from './Revenue';
 import Expenses from './Expenses';
 import Inventory from './Inventory';
@@ -33,15 +34,43 @@ const Business = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await db
-        .collection('users-archive')
+      const userDoc = await db
+        .collection('users')
         .doc(businessId)
-        .get()
-        .then(doc => {
-          setBusiness(doc.data());
+        .get();
+      const user = userDoc.data();
+
+      // products
+      if (user.productMigrated) {
+        const snapshot = await db
+          .collection(`/users/${businessId}/products`)
+          .orderBy('index')
+          .get();
+        user.products = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          user.products.push(...data.products);
         });
+      }
+
+      // transactions
+      const url =
+        'https://us-central1-open-fintech.cloudfunctions.net/data/transactions';
+      const params = {
+        id: businessId,
+        start: new Date('2000-01-01T00:00:00.000Z'),
+        end: new Date()
+      };
+      const response = await axios.get(url, { params });
+      if (
+        response.status === 200 &&
+        response.data &&
+        response.data.transactions
+      )
+        user.transactions = response.data.transactions;
+      setBusiness(user);
     };
-    fetchData().then(() => console.log(`load data from ${businessId}`));
+    fetchData().then(() => console.log(`data loaded from ${businessId}`));
   }, [businessId]);
 
   if (!business) return <Loading />;
