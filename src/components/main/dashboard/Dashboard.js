@@ -51,6 +51,7 @@ const Dashboard = () => {
         newUsers = [];
       await db
         .collection('users-archive')
+        .orderBy('business_name')
         .get()
         .then(snapshot => {
           snapshot.forEach(doc => {
