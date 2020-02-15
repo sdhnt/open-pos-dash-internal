@@ -89,12 +89,7 @@ const BusinessModal = props => {
             </Typography>
           </div>
           <div className={classes.right}>
-            <Button
-              color="primary"
-              component={Link}
-              to={`/details`}
-              onClick={() => sessionStorage.setItem('businessId', user.id)}
-            >
+            <Button color="primary" component={Link} to={`/details/${user.id}`}>
               More details
             </Button>
           </div>

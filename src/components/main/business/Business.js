@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { FirebaseDB as db } from '../../../constants/firebase';
+import { useParams } from 'react-router-dom';
 import Revenue from './Revenue';
 import Expenses from './Expenses';
 import Inventory from './Inventory';
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 
 const Business = () => {
   const classes = useStyles();
-  const businessId = sessionStorage.getItem('businessId');
+  const { id: businessId } = useParams();
   const [business, setBusiness] = useState();
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const Business = () => {
           setBusiness(doc.data());
         });
     };
-    fetchData();
+    fetchData().then(() => console.log(`load data from ${businessId}`));
   }, [businessId]);
 
   if (!business) return <Loading />;
