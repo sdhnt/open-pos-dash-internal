@@ -62,7 +62,11 @@ const Business = () => {
         end: new Date()
       };
       const response = await axios.get(url, { params });
-      if (response.data && response.data.transactions)
+      if (
+        response.status === 200 &&
+        response.data &&
+        response.data.transactions
+      )
         user.transactions = response.data.transactions;
       setBusiness(user);
     };
